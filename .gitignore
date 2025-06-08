@@ -1,0 +1,14 @@
+# Python cache
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+env/
+
+# ChromeDriver
+chromedriver
+
+# Firebase service account keys
+*.json
