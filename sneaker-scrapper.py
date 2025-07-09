@@ -10,10 +10,10 @@ import json
 
 def setup_driver(headless=True):
     options = webdriver.ChromeOptions()
-    if headless:
-        options.add_argument('--headless')
+    options.add_argument("--headless=new")
     options.add_argument('--disable-gpu')
     options.add_argument('--no-sandbox')
+    options.add_argument("--disable-dev-shm-usage")
     options.add_argument('--window-size=1280,1024')
     return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
@@ -34,6 +34,8 @@ def scrape_sneakers():
     while True:
         list_url = f"{base_url}?page={page}"
         print(f"🔗 Opening list page {page}: {list_url}")
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+        time.sleep(2)
         driver.get(list_url)
         try:
             wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, '[data-test-id="raffle-item"]')))
