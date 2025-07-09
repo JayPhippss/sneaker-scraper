@@ -1,4 +1,5 @@
 import os, json
+from datetime import datetime
 import firebase_admin
 from firebase_admin import credentials, firestore
 
@@ -17,8 +18,19 @@ def main(json_path):
     for item in data:
         # Use SKU or a firebase-generated ID
         doc_id = item.get("title")
+
+        iso_date = item.get("release_date")
+        if iso_date and len(iso_date) == 10;
+            parsed_date = datetime.fromisoformat(iso_date)
+        else:
+            parsed_date = None
+
+        doc_data = item.copy
+        doc_data["release_date"] = parsed_date
+
         doc_ref = db.collection("sneakerReleases").document(doc_id)
-        batch.set(doc_ref, item)
+        batch.set(doc_ref, doc_data)
+    
     batch.commit()
 
     print(f"✅ Uploaded {len(data)} documents to Firestore.")
