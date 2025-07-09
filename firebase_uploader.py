@@ -20,7 +20,7 @@ def main(json_path):
         doc_id = item.get("title")
 
         iso_date = item.get("release_date")
-        if iso_date and len(iso_date) == 10;
+        if iso_date and len(iso_date) == 10:
             parsed_date = datetime.fromisoformat(iso_date)
         else:
             parsed_date = None
