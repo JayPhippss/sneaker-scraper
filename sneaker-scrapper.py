@@ -25,7 +25,7 @@ def safe_find(driver, by, value, attr=None):
         return ""
 
 def scrape_sneakers():
-    driver = setup_driver(headless=False)
+    driver = setup_driver(headless=True)
     wait = WebDriverWait(driver, 10)
     base_url = "https://www.soleretriever.com/sneaker-release-dates"
     page = 1
