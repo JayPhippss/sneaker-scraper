@@ -25,7 +25,7 @@ def main(json_path):
         else:
             parsed_date = None
 
-        doc_data = item.copy
+        doc_data = item.copy()
         doc_data["release_date"] = parsed_date
 
         doc_ref = db.collection("sneakerReleases").document(doc_id)
