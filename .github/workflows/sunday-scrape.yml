@@ -28,6 +28,19 @@ jobs:
       - name: Run headless scraper
         run: python sneaker-scrapper.py
 
+      - name: Prepare Firebase credentials
+        # expose the secret as an env var
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          echo "Loaded service account into env var"
+
+      - name: Upload scraped data to Firebase
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          python firebase_uploader.py
+
       - name: Upload JSON artifact
         uses: actions/upload-artifact@v4
         with:
