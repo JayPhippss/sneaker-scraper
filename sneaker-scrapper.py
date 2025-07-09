@@ -5,16 +5,25 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 from datetime import datetime
+import tempfile
 import time
 import json
 
 def setup_driver(headless=True):
-    options = webdriver.ChromeOptions()
-    options.add_argument("--headless=new")
-    options.add_argument('--disable-gpu')
-    options.add_argument('--no-sandbox')
+    from selenium.webdriver.chrome.options import Options
+    options = Options()
+    if headless:
+        options.add_argument("--headless=new")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
-    options.add_argument('--window-size=1280,1024')
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_argument("--window-size=1280,1024")
+    options.add_argument(
+      "user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+      "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
+    )
+    options.add_argument(f"--user-data-dir={tempfile.mkdtemp(prefix='chrome-')}")
     return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
 def safe_find(driver, by, value, attr=None):
@@ -26,7 +35,7 @@ def safe_find(driver, by, value, attr=None):
 
 def scrape_sneakers():
     driver = setup_driver(headless=True)
-    wait = WebDriverWait(driver, 10)
+    wait = WebDriverWait(driver, 20)
     base_url = "https://www.soleretriever.com/sneaker-release-dates"
     page = 1
     all_sneakers = []
@@ -34,9 +43,14 @@ def scrape_sneakers():
     while True:
         list_url = f"{base_url}?page={page}"
         print(f"🔗 Opening list page {page}: {list_url}")
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
-        time.sleep(2)
         driver.get(list_url)
+
+        wait.until(lambda d: d.execute_script("return document.readyState") == "complete")
+        time.sleep(2)
+
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(2)
+        
         try:
             wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, '[data-test-id="raffle-item"]')))
         except:
