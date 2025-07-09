@@ -8,7 +8,7 @@ from datetime import datetime
 import time
 import json
 
-def setup_driver(headless=False):
+def setup_driver(headless=True):
     options = webdriver.ChromeOptions()
     if headless:
         options.add_argument('--headless')
