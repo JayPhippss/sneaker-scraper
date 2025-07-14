@@ -47,7 +47,7 @@ def main(json_path):
     for i in range(0, len(ops), CHUNK_SIZE):
         batch = db.batch()
         for op in ops[i : i + CHUNK_SIZE]:
-            if op[0] = "delete":
+            if op[0] == "delete":
                 batch.delete(op[1])
             else:
                 batch.set(op[1], op[2])
