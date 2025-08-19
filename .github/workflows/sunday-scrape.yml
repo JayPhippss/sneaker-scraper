@@ -29,15 +29,14 @@ jobs:
         run: python sneaker-scrapper.py
 
       - name: Prepare Firebase credentials
-        # expose the secret as an env var
-        env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         run: |
-          echo "Loaded service account into env var"
+          echo "${{ secrets.FIREBASE_ADMIN }}" > firebase-key.json
+          echo "Credentials file created."
+        shell: bash
 
       - name: Upload scraped data to Firebase
         env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          GOOGLE_APPLICATION_CREDENTIALS: firebase-key.json
         run: |
           python firebase_uploader.py
 
