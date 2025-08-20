@@ -5,7 +5,7 @@ from firebase_admin import credentials, firestore
 
 def main(json_path):
     # 1. Load service account from env‐var
-    sa_json = os.environ["FIREBASE_SERVICE_ACCOUNT"]
+    sa_json = os.environ["FIREBASE_ADMIN"]
     sa_info = json.loads(sa_json)
     cred = credentials.Certificate(sa_info)
     firebase_admin.initialize_app(cred)
